@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>frozenset 객체 설명</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Noto Sans KR', Arial, sans-serif; line-height: 1.7; margin: 2em; background: #f9f9f9; color: #222; }
+        h1, h2, h3 { color: #2a4d7a; }
+        code, pre { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+        pre { padding: 1em; overflow-x: auto; }
+        ul { margin-left: 1.5em; }
+        .tip { background: #e6f7ff; border-left: 4px solid #1890ff; padding: 0.5em 1em; margin: 1em 0; }
+    </style>
+</head>
+<body>
+    <h1>frozenset 객체란?</h1>
+    <h2>1. 개념</h2>
+    <ul>
+        <li>frozenset은 파이썬의 내장 불변(immutable) 집합 자료형입니다.</li>
+        <li>set과 거의 동일하지만, 한 번 생성하면 원소를 추가/삭제할 수 없습니다.</li>
+        <li>불변이기 때문에 set과 달리 딕셔너리의 키, set의 원소로 사용할 수 있습니다.</li>
+    </ul>
+
+    <h2>2. 생성 방법</h2>
+    <pre><code>fs = frozenset([1, 2, 3])
+print(fs)  # frozenset({1, 2, 3})
+</code></pre>
+
+    <h2>3. 주요 특징</h2>
+    <ul>
+        <li>set과 마찬가지로 합집합, 교집합, 차집합 등 집합 연산 지원</li>
+        <li>불변(immutable)이라 원소 추가/삭제 불가</li>
+        <li>hashable(해시 가능)하므로 dict의 키, set의 원소로 사용 가능</li>
+    </ul>
+
+    <h2>4. 주요 메서드 예시</h2>
+    <pre><code>fs1 = frozenset([1, 2, 3])
+fs2 = frozenset([3, 4, 5])
+
+print(fs1 | fs2)  # 합집합: frozenset({1, 2, 3, 4, 5})
+print(fs1 & fs2)  # 교집합: frozenset({3})
+print(fs1 - fs2)  # 차집합: frozenset({1, 2})
+print(fs1 ^ fs2)  # 대칭차집합: frozenset({1, 2, 4, 5})
+</code></pre>
+
+    <h2>5. set과의 차이점</h2>
+    <ul>
+        <li>set: 가변(mutable), 원소 추가/삭제 가능</li>
+        <li>frozenset: 불변(immutable), 원소 추가/삭제 불가</li>
+    </ul>
+    <pre><code>s = set([1, 2, 3])
+s.add(4)  # 가능
+fs = frozenset([1, 2, 3])
+# fs.add(4)  # AttributeError 발생
+</code></pre>
+
+    <h2>6. 활용 예시</h2>
+    <ul>
+        <li>딕셔너리의 키로 사용</li>
+        <li>set의 원소로 사용</li>
+    </ul>
+    <pre><code>my_dict = {frozenset([1, 2]): "값"}
+print(my_dict[frozenset([1, 2])])  # "값"
+
+my_set = set()
+my_set.add(frozenset([1, 2]))
+print(my_set)  # {frozenset({1, 2})}
+</code></pre>
+
+    <div class="tip">
+        <b>TIP:</b> frozenset은 데이터의 불변성과 해시 가능성이 필요한 상황에서 매우 유용합니다.
+    </div>
+</body>
+</html>
