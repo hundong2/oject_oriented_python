@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>uv 패키지 관리 가이드</title>
+    <style>
+        body { font-family: 'Noto Sans KR', Arial, sans-serif; line-height: 1.7; margin: 2em; background: #f9f9f9; color: #222; }
+        h1, h2, h3 { color: #2a4d7a; }
+        code, pre { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+        pre { padding: 1em; overflow-x: auto; }
+        ul { margin-left: 1.5em; }
+        .tip { background: #e6f7ff; border-left: 4px solid #1890ff; padding: 0.5em 1em; margin: 1em 0; }
+    </style>
+</head>
+<body>
+    <h1>uv 패키지 관리 가이드</h1>
+    <p><b>uv</b>는 Python 프로젝트의 패키지 관리와 의존성 설치를 빠르고 효율적으로 도와주는 최신 패키지 매니저입니다. <br>
+    <a href="https://github.com/astral-sh/uv" target="_blank">공식 GitHub 저장소</a>에서 최신 정보를 확인할 수 있습니다.</p>
+
+    <h2>1. uv란?</h2>
+    <ul>
+        <li>Python용 초고속 패키지 관리 도구 (Rust로 구현)</li>
+        <li>pip, pip-tools, virtualenv, pipenv, poetry 등과 호환</li>
+        <li>의존성 설치, 잠금(lock) 파일 생성, 가상환경 관리 등 지원</li>
+    </ul>
+
+    <h2>2. 설치 방법</h2>
+    <pre><code>curl -Ls https://astral.sh/uv/install.sh | sh
+</code></pre>
+    <div class="tip">macOS, Linux, Windows 모두 지원합니다.</div>
+
+    <h2>3. 주요 명령어</h2>
+    <ul>
+        <li><b>패키지 설치</b>:<br>
+            <code>uv pip install 패키지명</code><br>
+            예시: <code>uv pip install requests</code>
+        </li>
+        <li><b>패키지 삭제</b>:<br>
+            <code>uv pip uninstall 패키지명</code>
+        </li>
+        <li><b>패키지 목록 확인</b>:<br>
+            <code>uv pip list</code>
+        </li>
+        <li><b>requirements.txt 설치</b>:<br>
+            <code>uv pip install -r requirements.txt</code>
+        </li>
+        <li><b>가상환경 생성</b>:<br>
+            <code>uv venv .venv</code>
+        </li>
+        <li><b>가상환경 활성화</b>:<br>
+            <code>source .venv/bin/activate</code> (macOS/Linux)<br>
+            <code>.venv\Scripts\activate</code> (Windows)
+        </li>
+        <li><b>패키지 업그레이드</b>:<br>
+            <code>uv pip install --upgrade 패키지명</code>
+        </li>
+        <li><b>패키지 캐시 삭제</b>:<br>
+            <code>uv pip cache purge</code>
+        </li>
+    </ul>
+
+    <h2>4. 의존성 잠금(lock) 파일</h2>
+    <ul>
+        <li><b>lock 파일 생성</b>:<br>
+            <code>uv pip compile requirements.in</code><br>
+            → <code>requirements.txt</code> 또는 <code>requirements.lock</code> 생성
+        </li>
+        <li><b>lock 파일로 설치</b>:<br>
+            <code>uv pip sync requirements.txt</code>
+        </li>
+    </ul>
+
+    <h2>5. pip와의 차이점</h2>
+    <ul>
+        <li>설치 속도가 매우 빠름 (Rust 기반)</li>
+        <li>pip, pip-tools, virtualenv, pipenv, poetry 등과 호환</li>
+        <li>더 나은 캐싱 및 병렬 처리</li>
+        <li>pip 명령어와 거의 동일하게 사용 가능</li>
+    </ul>
+
+    <h2>6. 실전 예시</h2>
+    <pre><code># 1. 가상환경 생성 및 활성화
+uv venv .venv
+source .venv/bin/activate
+
+# 2. 패키지 설치
+uv pip install numpy pandas
+
+# 3. requirements.txt로부터 설치
+uv pip install -r requirements.txt
+
+# 4. lock 파일 생성 및 동기화
+uv pip compile requirements.in
+uv pip sync requirements.txt
+
+# 5. 패키지 삭제
+uv pip uninstall pandas
+    </code></pre>
+
+    <h2>7. 참고 자료</h2>
+    <ul>
+        <li><a href="https://github.com/astral-sh/uv" target="_blank">uv 공식 GitHub</a></li>
+        <li><a href="https://astral.sh/docs/uv/" target="_blank">uv 공식 문서</a></li>
+        <li><a href="https://blog.astral.sh/uv/" target="_blank">uv 소개 블로그</a></li>
+    </ul>
+
+    <div class="tip">
+        <b>TIP:</b> uv는 기존 pip 프로젝트에도 바로 적용할 수 있습니다. <br>
+        pip 대신 uv pip을 사용하면 더 빠르고 효율적인 패키지 관리를 경험할 수 있습니다.
+    </div>
+</body>
+</html>
