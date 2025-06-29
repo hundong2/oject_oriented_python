@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>ch02_ex5 주요 타입 힌트와 함수 설명</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Noto Sans KR', Arial, sans-serif; line-height: 1.7; margin: 2em; background: #f9f9f9; color: #222; }
+        h1, h2, h3 { color: #2a4d7a; }
+        code, pre { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+        pre { padding: 1em; overflow-x: auto; }
+        ul { margin-left: 1.5em; }
+        .tip { background: #e6f7ff; border-left: 4px solid #1890ff; padding: 0.5em 1em; margin: 1em 0; }
+    </style>
+</head>
+<body>
+    <h1>ch02_ex5.py에서 자주 쓰이는 타입 힌트와 함수 설명</h1>
+
+    <h2>1. <code>isinstance()</code></h2>
+    <ul>
+        <li>파이썬 내장 함수로, 객체가 특정 클래스(혹은 그 하위 클래스)의 인스턴스인지 확인할 때 사용합니다.</li>
+        <li><b>문법:</b> <code>isinstance(객체, 클래스)</code></li>
+        <li>여러 타입을 튜플로 전달 가능: <code>isinstance(x, (int, float))</code></li>
+    </ul>
+    <pre><code>class A: pass
+class B(A): pass
+b = B()
+print(isinstance(b, A))  # True (B는 A의 하위 클래스)
+</code></pre>
+
+    <h2>2. <code>cast()</code> (typing 모듈)</h2>
+    <ul>
+        <li>정적 타입 검사기(예: mypy)에게 "이 값은 내가 지정한 타입이라고 간주해라"라고 알려주는 용도입니다.</li>
+        <li>런타임에는 아무런 변환도 하지 않고, 값 자체를 그대로 반환합니다.</li>
+        <li>잘못된 타입을 cast해도 런타임 오류는 발생하지 않지만, 실제 사용 시 타입이 맞지 않으면 AttributeError 등은 발생할 수 있습니다.</li>
+    </ul>
+    <pre><code>from typing import cast
+
+def foo(x: object):
+    y = cast(str, x)  # 타입 검사기에게 y는 str이라고 알려줌
+    return y
+</code></pre>
+
+    <h2>3. <code>@overload</code> (typing 모듈)</h2>
+    <ul>
+        <li>함수나 메서드가 여러 가지 시그니처(입력 타입/개수)에 따라 다르게 동작할 수 있음을 타입 검사기에게 알려주는 데코레이터입니다.</li>
+        <li>실제 구현은 마지막에 한 번만 작성하고, 그 위에 여러 개의 @overload 시그니처를 선언합니다.</li>
+        <li>런타임에는 아무 영향이 없고, 타입 검사기만 참고합니다.</li>
+    </ul>
+    <pre><code>from typing import overload
+
+@overload
+def func(x: int) -> int: ...
+@overload
+def func(x: str) -> str: ...
+def func(x):
+    # 실제 구현
+    if isinstance(x, int):
+        return x + 1
+    return x.upper()
+</code></pre>
+
+    <h2>4. <code>Union[]</code> (typing 모듈)</h2>
+    <ul>
+        <li>여러 타입 중 하나가 올 수 있음을 명시합니다.</li>
+        <li><b>예시:</b> <code>Union[int, str]</code>는 int 또는 str 타입이 올 수 있음을 의미합니다.</li>
+    </ul>
+    <pre><code>from typing import Union
+
+def foo(x: Union[int, str]):
+    print(x)
+</code></pre>
+
+    <h2>5. <code>Optional[]</code> (typing 모듈)</h2>
+    <ul>
+        <li>특정 타입 또는 None이 올 수 있음을 명시합니다.</li>
+        <li><code>Optional[X]</code>는 <code>Union[X, None]</code>과 같습니다.</li>
+    </ul>
+    <pre><code>from typing import Optional
+
+def foo(x: Optional[int]):
+    if x is not None:
+        print(x + 1)
+    else:
+        print("None!")
+</code></pre>
+
+    <h2>6. 실전 예시 (Hand4 생성자)</h2>
+    <pre><code>class Hand4:
+    @overload
+    def __init__(self, arg1: "Hand4") -> None: ...
+    @overload
+    def __init__(self, arg1: "Hand4", arg2: Card, *, split: int) -> None: ...
+    @overload
+    def __init__(self, arg1: Card, arg2: Card, arg3: Card) -> None: ...
+    def __init__(self, arg1: Union["Hand4", Card], arg2: Optional[Card]=None, arg3: Optional[Card]=None, split: Optional[int]=None):
+        # ...구현 생략...
+</code></pre>
+    <ul>
+        <li>이렇게 여러 생성자 시그니처를 타입 검사기에 명확히 알려줄 수 있습니다.</li>
+    </ul>
+
+    <h2>7. 참고 자료</h2>
+    <ul>
+        <li><a href="https://docs.python.org/ko/3/library/typing.html" target="_blank" rel="noopener">파이썬 공식 typing 문서</a></li>
+        <li><a href="https://mypy.readthedocs.io/" target="_blank" rel="noopener">mypy 공식 문서</a></li>
+    </ul>
+
+    <div class="tip">
+        <b>TIP:</b> 타입 힌트와 타입 검사기는 코드의 안정성과 가독성을 높여주지만, 런타임 동작에는 영향을 주지 않습니다.<br>
+        타입 힌트는 개발자와 도구(IDE, mypy 등)를 위한 정보입니다.
+    </div>
+</body>
+</html>
