@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>iter와 Enum, 일반 클래스에서의 사용 정리</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 2em; }
+        code, pre { background: #f4f4f4; padding: 2px 4px; border-radius: 4px; }
+        h2 { color: #2d5fa4; }
+        ul { margin-bottom: 1.5em; }
+    </style>
+</head>
+<body>
+    <h1>iter와 Enum, 일반 클래스에서의 사용 정리</h1>
+
+    <h2>1. <code>cast(Iterable[Suit], Suit)</code>의 의미</h2>
+    <ul>
+        <li>
+            <code>cast(Iterable[Suit], Suit)</code>는 <b>타입 힌트용</b> 문법으로, <code>Suit</code> 객체를 <code>Iterable[Suit]</code>로 간주하라는 의미입니다.
+        </li>
+        <li>
+            실제로 <code>Suit</code>는 이터러블이 아니므로, 올바른 사용이 아닙니다.
+        </li>
+        <li>
+            타입 검사기(mypy 등)에게만 영향을 주며, 런타임에는 아무 동작도 하지 않습니다.
+        </li>
+        <li>
+            <b>올바른 이터러블 사용 예시:</b> <code>iter(Suit)</code>
+        </li>
+    </ul>
+    <pre>
+from typing import cast, Iterable
+from enum import Enum
+
+class Suit(Enum):
+    Club = '♣'
+    Spade = '♠'
+
+# 잘못된 예시
+cast(Iterable[Suit], Suit.Club)  # 타입 검사기용, 실제로는 이터러블 아님
+
+# 올바른 예시
+iter(Suit)  # Suit의 모든 멤버를 이터러블로 반환
+    </pre>
+
+    <h2>2. <code>iter(Suit)</code>의 결과</h2>
+    <ul>
+        <li>
+            <code>iter(Suit)</code>을 실행하면 <b>Suit 열거형(Enum)의 모든 멤버</b>를 순회할 수 있는 이터레이터가 생성됩니다.
+        </li>
+        <li>
+            예시:
+        </li>
+    </ul>
+    <pre>
+from enum import Enum
+
+class Suit(Enum):
+    Club = '♣'
+    Diamond = '♦'
+    Heart = '♥'
+    Spade = '♠'
+
+for s in iter(Suit):
+    print(s)
+# 출력:
+# Suit.Club
+# Suit.Diamond
+# Suit.Heart
+# Suit.Spade
+    </pre>
+
+    <h2>3. <code>iter(Suit)</code>가 순회하는 대상</h2>
+    <ul>
+        <li>
+            <b>클래스 안의 모든 변수</b>를 순회하는 것이 아니라, <b>Enum 클래스의 멤버(값)</b>만 순회합니다.
+        </li>
+        <li>
+            메서드, 일반 변수 등은 포함되지 않습니다.
+        </li>
+    </ul>
+
+    <h2>4. 일반 클래스에서 <code>iter(클래스명)</code> 사용 가능 여부</h2>
+    <ul>
+        <li>
+            <b>불가능</b>합니다. 일반 클래스는 <code>__iter__</code> 메서드가 없으므로 <code>iter(MyClass)</code>는 TypeError를 발생시킵니다.
+        </li>
+        <li>
+            직접 <code>__iter__</code>를 구현하면 인스턴스에서 순회가 가능합니다.
+        </li>
+    </ul>
+    <pre>
+class MyClass:
+    a = 1
+    b = 2
+
+iter(MyClass)  # TypeError: 'type' object is not iterable
+
+# 직접 구현 예시
+class MyClass:
+    a = 1
+    b = 2
+
+    def __iter__(self):
+        return iter([self.a, self.b])
+
+obj = MyClass()
+for x in obj:
+    print(x)  # 1, 2 출력
+    </pre>
+</body>
+</html>

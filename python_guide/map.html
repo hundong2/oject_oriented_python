@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>파이썬 map 함수 완벽 가이드</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Noto Sans KR', Arial, sans-serif; line-height: 1.7; margin: 2em; background: #f9f9f9; color: #222; }
+        h1, h2, h3 { color: #2a4d7a; }
+        code, pre { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+        pre { padding: 1em; overflow-x: auto; }
+        ul { margin-left: 1.5em; }
+        .tip { background: #e6f7ff; border-left: 4px solid #1890ff; padding: 0.5em 1em; margin: 1em 0; }
+    </style>
+</head>
+<body>
+    <h1>파이썬 <code>map</code> 함수 완벽 가이드</h1>
+
+    <h2>1. map 함수란?</h2>
+    <ul>
+        <li>map 함수는 반복 가능한 객체(리스트, 튜플 등)의 각 요소에 함수를 적용하여 새로운 이터레이터를 반환합니다.</li>
+        <li>함수형 프로그래밍 스타일의 대표적인 내장 함수입니다.</li>
+    </ul>
+
+    <h2>2. 기본 문법</h2>
+    <pre><code>map(함수, 반복가능객체1[, 반복가능객체2, ...])</code></pre>
+    <ul>
+        <li>여러 개의 반복가능객체를 동시에 처리할 수도 있습니다.</li>
+        <li>결과는 <b>이터레이터</b>이므로, list() 등으로 감싸서 사용하거나 for문으로 순회해야 합니다.</li>
+    </ul>
+
+    <h2>3. 기본 예제</h2>
+    <pre><code># 각 요소에 제곱 함수 적용
+nums = [1, 2, 3, 4]
+squares = map(lambda x: x ** 2, nums)
+print(list(squares))  # [1, 4, 9, 16]
+</code></pre>
+
+    <h2>4. 여러 시퀀스 동시 처리</h2>
+    <pre><code>a = [1, 2, 3]
+b = [10, 20, 30]
+result = map(lambda x, y: x + y, a, b)
+print(list(result))  # [11, 22, 33]
+</code></pre>
+
+    <h2>5. 자주 쓰이는 지원 함수/활용법</h2>
+    <ul>
+        <li><b>str, int, float 등 내장 함수와 함께 사용</b></li>
+    </ul>
+    <pre><code>str_nums = ['1', '2', '3']
+nums = map(int, str_nums)
+print(list(nums))  # [1, 2, 3]
+
+words = ['hello', 'python']
+upper_words = map(str.upper, words)
+print(list(upper_words))  # ['HELLO', 'PYTHON']
+</code></pre>
+
+    <ul>
+        <li><b>filter, reduce와 조합</b></li>
+    </ul>
+    <pre><code>from functools import reduce
+nums = [1, 2, 3, 4, 5]
+squares = map(lambda x: x ** 2, nums)
+even_squares = filter(lambda x: x % 2 == 0, squares)
+sum_even = reduce(lambda x, y: x + y, even_squares)
+print(sum_even)  # 20
+</code></pre>
+
+    <h2>6. map vs 리스트 컴프리헨션</h2>
+    <ul>
+        <li>동일한 결과를 리스트 컴프리헨션으로도 얻을 수 있습니다.</li>
+    </ul>
+    <pre><code>nums = [1, 2, 3]
+# map 사용
+result1 = list(map(lambda x: x + 1, nums))
+# 리스트 컴프리헨션 사용
+result2 = [x + 1 for x in nums]
+print(result1, result2)  # [2, 3, 4] [2, 3, 4]
+</code></pre>
+
+    <h2>7. map 객체의 특징</h2>
+    <ul>
+        <li>게으른 평가(lazy evaluation): 실제로 값을 사용할 때만 함수가 적용됩니다.</li>
+        <li>한 번 순회하면 소진됩니다(이터레이터).</li>
+    </ul>
+
+    <h2>8. map과 함께 자주 쓰는 내장 함수/패턴</h2>
+    <ul>
+        <li><b>list, tuple, set</b>: map 결과를 원하는 컬렉션으로 변환</li>
+        <li><b>lambda</b>: 간단한 함수를 즉석에서 정의</li>
+        <li><b>str, int, float, bool</b>: 타입 변환에 자주 사용</li>
+        <li><b>operator 모듈</b>: operator.add, operator.mul 등으로 더 간결하게</li>
+    </ul>
+    <pre><code>import operator
+nums1 = [1, 2, 3]
+nums2 = [4, 5, 6]
+result = map(operator.mul, nums1, nums2)
+print(list(result))  # [4, 10, 18]
+</code></pre>
+
+    <h2>9. map의 단점 및 주의점</h2>
+    <ul>
+        <li>가독성이 떨어질 수 있음(특히 lambda가 복잡할 때)</li>
+        <li>이터레이터이므로 여러 번 사용할 경우 list()로 변환 필요</li>
+    </ul>
+
+    <h2>10. 참고 자료</h2>
+    <ul>
+        <li><a href="https://docs.python.org/ko/3/library/functions.html#map" target="_blank" rel="noopener">공식 문서: map</a></li>
+        <li><a href="https://docs.python.org/ko/3/howto/functional.html" target="_blank" rel="noopener">파이썬 함수형 프로그래밍 HOWTO</a></li>
+    </ul>
+
+    <div class="tip">
+        <b>TIP:</b> map은 대량 데이터 처리, 타입 변환, 여러 시퀀스 동시 처리 등에서 매우 유용합니다.<br>
+        하지만 복잡한 로직에는 리스트 컴프리헨션이 더 가독성이 좋을 수 있습니다.
+    </div>
+</body>
+</html>
