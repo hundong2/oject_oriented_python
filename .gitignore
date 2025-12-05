@@ -1,0 +1,77 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
+.history/
+
+# Python 가상환경
+.venv/
+venv/
+env/
+ENV/
+pip-log.txt
+pip-wheel-metadata/
+
+# uv (astral-sh)
+.uv/
+uv.lock
+
+# PyCharm
+.idea/
+
+# Byte-compiled / compiled / C extensions
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 배포/빌드 아티팩트
+build/
+dist/
+eggs/
+*.egg-info/
+*.egg
+wheels/
+MANIFEST
+
+# 테스트/커버리지
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+pytest_cache/
+nosetests.xml
+coverage.xml
+*.log
+
+# 타입/정적 분석
+.mypy_cache/
+.pytype/
+.pyre/
+ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+# 출력/실험 데이터(원하면 유지 필요 시 제외)
+*.nbconvert.ipynb
+# 파생 파일
+**/.jupyter/
+
+# 프로젝트 특화: 데이터/비밀(필요 시 사용)
+# data/
+# secrets.json
+# .env 파일
+.env
+.env.*
+
+# 콘다
+conda-meta/
+*.conda
+*.lock
+
+# 기타
+*.sqlite3
+*.db
