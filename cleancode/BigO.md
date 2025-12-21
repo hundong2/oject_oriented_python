@@ -114,6 +114,36 @@ int CountPairsLess(int[] a) {
 - 같은 빅오라도 상수 계수 차이로 실제 성능이 달라질 수 있습니다.
 - 데이터가 작을 때는 단순 알고리즘이 더 빠를 수 있습니다.
 
+# 일반적인 함수 호출의 빅오 차수 
+
+- s[i] 값읽기 할당 : O(1)
+- s.append(value) : O(1)
+- s.insert(i, value) : O(n) 
+- s.remove(value) : O(n)
+- s.reverse() : O(n)
+- s.sort() : O(nlogn)
+- value in s : O(n) 
+- len(s) : O(1) 
+
+## dictionary, set, frozenset
+
+- m[key] read, assign : O(1)
+- m.add(value) : O(1)  
+- value in m : O(1) 
+- len(m) : O(1)
+
+## 한눈에 분석하는 빅오
+
+- 코드가 데이터에 전혀 접근하지 않으면 O(1)
+- 루프문에서 데이터에 접근하면 O(n)
+- 두 중첩된 루프문에서 데이터를 순회하면 O(n^2)
+- 함수 호출은 한단계로 세지 않고 함수 내부 코드의 총 단계 수를 센다. 
+- 코드가 데이터를 반복적으로 반으로나누는 분할 정복 단계로 구성되어 있다면 O(logN)
+- 코드가 데이터에서 아이템당 한번씩 이루어지는 분할 정복 단계로 구성되어 ㅣ있다면 O(N log N )
+- 코드가 N개의 데이터에서 가능한 모든 값의 조합을 고려한다면, O(2^N )
+- 코드가 데이터에 이쓴ㄴ 모든 값의 가능한 순열 O(N!)
+- 코드가 데이터를 정렬하는 작업을 수반 O(n log n )
+
 ### 추가 자료
 - [Big O Cheatsheet](https://www.bigocheatsheet.com/)
 - [cppreference: std::sort](https://en.cppreference.com/w/cpp/algorithm/sort)
